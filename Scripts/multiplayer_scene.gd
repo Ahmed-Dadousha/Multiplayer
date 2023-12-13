@@ -21,12 +21,15 @@ signal server_disconnected
 func playerConnected(id):
 	print("Player " + str(id) + " Connected")
 	players_loaded += 1
+	
 	# To check if it is null
 	if $Controls/Name.text.strip_edges() == "":
 		$Controls/Name.text = "Unknown"
 		
 	playerData["name"] = $Controls/Name.text
-
+	
+	register_player.rpc_id(id, playerData)	
+	
 func playerDisconnected(id):
 	# Remove the player data if disconnected
 	players.erase(id)
@@ -58,10 +61,11 @@ func startGame():
 	get_tree().root.add_child(scene)
 	self.hide()
 
-# Data Transfer Is Slow But Safe
-#@rpc("any_peer", "reliable")
-#func register_player(new_player_info):
-	#pass
+# Called On All Devieces
+@rpc("any_peer", "call_local", "reliable")
+func register_player(newPlayerData):
+	var newPlayerId = multiplayer.get_remote_sender_id()
+	players[newPlayerId] = newPlayerData
 
 # Buttons Pressed Signals
 func _on_host_pressed():
@@ -113,16 +117,17 @@ func _on_start_game_pressed():
 	# The game will not start on the host
 	if !multiplayer.is_server():
 		# The game will start on current peer only
+		#startGame()
 		startGame.rpc_id(multiplayer.get_unique_id())
-		#startGame.rpc()
 	else:
 		print("This is the server can not create player!")
+
 func _on_disconnect_pressed():
 	multiplayer.multiplayer_peer = null
 
 func _on_print_data_pressed():
-	for player in players:
-		print(player)
+	for player in players.keys():
+		print(players[player])
 	print(players_loaded)
 
 # My Custem Functions
