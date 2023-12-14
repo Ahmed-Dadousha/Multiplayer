@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
 #func _enter_tree():
-	# Set The Player ID
-	#set_multiplayer_authority(name.to_int())
+	## To avoid control other players charcter
+	#set_multiplayer_authority(str(name).to_int())
 func _physics_process(_delta):
-	#if is_multiplayer_authority():
-		velocity = Input.get_vector("ui_left","ui_right","ui_up","ui_down") * 400
-		move_and_slide()
+	#if not is_multiplayer_authority(): return
+	
+	velocity = Input.get_vector("ui_left","ui_right","ui_up","ui_down") * 400
+	move_and_slide()

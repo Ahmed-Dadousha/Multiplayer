@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c312aa74b3nib"]
+[gd_scene load_steps=3 format=3 uid="uid://c312aa74b3nib"]
 
 [ext_resource type="Script" path="res://Scripts/multiplayer_scene.gd" id="1_sp03g"]
+[ext_resource type="Script" path="res://Scripts/LanServerVrowser.gd" id="2_fdsg8"]
 
 [node name="MultiplayerScene" type="Control"]
 layout_mode = 3
@@ -18,10 +19,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -124.0
-offset_top = -103.0
-offset_right = 124.0
-offset_bottom = 103.0
+offset_left = -572.0
+offset_top = -318.0
+offset_right = -360.0
+offset_bottom = -112.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -30,41 +31,97 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Enter The IP"
 placeholder_text = "Enter The IP"
+metadata/_edit_lock_ = true
 
 [node name="Port" type="LineEdit" parent="Controls"]
 layout_mode = 2
 tooltip_text = "Enter The Port"
 placeholder_text = "Enter The Port"
+metadata/_edit_lock_ = true
 
 [node name="Name" type="LineEdit" parent="Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Enter Your Name"
 placeholder_text = "Enter Your Name"
+metadata/_edit_lock_ = true
 
 [node name="Host" type="Button" parent="Controls"]
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
 text = "Host"
+metadata/_edit_lock_ = true
 
 [node name="Join" type="Button" parent="Controls"]
 layout_mode = 2
 text = "Join"
+metadata/_edit_lock_ = true
 
-[node name="StartGame" type="Button" parent="Controls"]
+[node name="DataOut" type="Button" parent="Controls"]
 layout_mode = 2
-text = "Start Game"
+text = "Print All Players Data"
+metadata/_edit_lock_ = true
 
-[node name="Disconnect" type="Button" parent="Controls"]
-layout_mode = 2
-text = "Disconnect"
+[node name="Lobby" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -87.0
+offset_top = -66.0
+offset_right = 88.0
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PrintData" type="Button" parent="Controls"]
+[node name="Label" type="Label" parent="Lobby"]
 layout_mode = 2
-text = "Print Data"
+text = "Waiting For Players...."
+
+[node name="PlayersCount" type="Label" parent="Lobby"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="Exit" type="Button" parent="Lobby"]
+layout_mode = 2
+text = "Exit"
+
+[node name="Data" type="Button" parent="Lobby"]
+layout_mode = 2
+text = "Print All Players Data"
+
+[node name="LanServerVrowser" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_fdsg8")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LanServerVrowser"]
+layout_mode = 0
+offset_left = 482.0
+offset_top = 65.0
+offset_right = 584.0
+offset_bottom = 131.0
+
+[node name="Listen" type="Button" parent="LanServerVrowser/VBoxContainer"]
+layout_mode = 2
+text = "Listen IP"
+
+[node name="Stop" type="Button" parent="LanServerVrowser/VBoxContainer"]
+layout_mode = 2
+text = "Stop"
+
+[node name="BroadCastTimer" type="Timer" parent="."]
 
 [connection signal="pressed" from="Controls/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="Controls/Join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="Controls/StartGame" to="." method="_on_start_game_pressed"]
-[connection signal="pressed" from="Controls/Disconnect" to="." method="_on_disconnect_pressed"]
-[connection signal="pressed" from="Controls/PrintData" to="." method="_on_print_data_pressed"]
+[connection signal="pressed" from="Controls/DataOut" to="." method="_on_data_out_pressed"]
+[connection signal="pressed" from="Lobby/Exit" to="." method="_on_Exit_pressed"]
+[connection signal="pressed" from="Lobby/Data" to="." method="_on_data_pressed"]
+[connection signal="pressed" from="LanServerVrowser/VBoxContainer/Listen" to="LanServerVrowser" method="_on_listen_pressed"]
+[connection signal="pressed" from="LanServerVrowser/VBoxContainer/Stop" to="LanServerVrowser" method="_on_stop_pressed"]
+[connection signal="timeout" from="BroadCastTimer" to="LanServerVrowser" method="_on_broad_cast_timer_timeout"]

@@ -1,4 +1,10 @@
 extends Node
+signal countChanged()
 
-var Players = {}
+var players = {}
 
+var playersLoaded: int = 0:
+	set(value):
+		playersLoaded = value
+		countChanged.emit()
+		
