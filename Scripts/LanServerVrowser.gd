@@ -2,6 +2,7 @@ extends Control
 
 signal server_found
 signal server_removed
+signal avilable_rooms_changed
 
 var RoomInfo = {"name": "name", "Count": 0}
 var broadcaster : PacketPeerUDP
@@ -9,20 +10,12 @@ var listener : PacketPeerUDP
 var listenPort: int = 8911
 var broadcastPort: int = 8912
 var run = false
-@onready var broadCastTimer = $"../BroadCastTimer" as Timer
+
+@onready var broadCastTimer = $BroadCastTimer as Timer
 @export var broadcastAddress: String = "192.168.1.255"
 
-func _process(_delta):
-	if run == true:
-		if listener.get_available_packet_count() > 0:
-			var serverIp = listener.get_packet_ip()
-			var serverPort = listener.get_packet_port()
-			var bytes = listener.get_packet()	
-			var data = bytes.get_string_from_ascii()
-			var roomInfo = JSON.parse_string(data)
-			
-			print("Server IP: " + serverIp + "; Port: " + str(serverPort) + "; RoomInfo: " + str(roomInfo) + ";")
 
+# Broad cast room data to all devices on LAN
 func setUpBroadCast(roomName):
 	RoomInfo.name = roomName
 	RoomInfo.Count = Global.players.size()
@@ -34,12 +27,13 @@ func setUpBroadCast(roomName):
 	var err = broadcaster.bind(broadcastPort)
 	
 	if err == OK:
-		print("Bound to Broadcast Port " + str(broadcaster) + " Successful!")
+		print("Bound to Broadcast Port " + str(listenPort) + " Successful!")
 	else:
 		print("Faild to bind to broadcast port!")
 	
 	broadCastTimer.start()
-	
+
+# Brocast room data every one Second
 func _on_broad_cast_timer_timeout():
 	print("Broadcasting Game!")
 	RoomInfo.Count = Global.playersLoaded
@@ -47,19 +41,23 @@ func _on_broad_cast_timer_timeout():
 	var packet = data.to_ascii_buffer()
 	broadcaster.put_packet(packet)
 
+# Start listening
 func _on_listen_pressed():
-	setUp()
-	run = true
-
+	runListener()
+	
+# Stop Listening
 func _on_stop_pressed():
 	cleanUp()
 
+# Stop Broadcasting & Listening
 func cleanUp():
-	listener.close()
+	if listener:
+		listener.close()
 	broadCastTimer.stop()
 	if broadcaster != null:
 		broadcaster.close()
 
+# Set up listener
 func setUp():
 	listener = PacketPeerUDP.new()
 	var err = listener.bind(listenPort)
@@ -68,3 +66,25 @@ func setUp():
 	else:
 		print("Faild to bind to listen port!")	
 
+#
+func _on_listener_timer_timeout():
+
+	if run == true:
+		if listener.get_available_packet_count() > 0:
+			var serverIp = listener.get_packet_ip()
+			var serverPort = listener.get_packet_port()
+			var bytes = listener.get_packet()	
+			var data = bytes.get_string_from_ascii()
+			var roomInfo = JSON.parse_string(data)
+			
+			print("Server IP: " + serverIp + "; Port: " + str(serverPort) + "; RoomInfo: " + str(roomInfo) + ";")
+			if serverIp != "":
+				Global.addIP(serverIp)
+		else:
+			var serverIp = listener.get_packet_ip()
+			Global.removeIP(serverIp)
+#
+func runListener():
+	setUp()
+	run = true
+	$ListenerTimer.start()

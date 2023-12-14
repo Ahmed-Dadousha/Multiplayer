@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6hilgny6bh7o"]
+
+[ext_resource type="Script" path="res://Scripts/game.gd" id="1_q44nk"]
+[ext_resource type="PackedScene" uid="uid://do68pp74fwc75" path="res://Scenes/player.tscn" id="2_0bulw"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_q44nk")
+playerScene = ExtResource("2_0bulw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.266667, 0.486275, 0.521569, 1)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -203.5
+offset_top = -34.5
+offset_right = 203.5
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.164706, 0, 0.72549, 1)
+theme_override_font_sizes/font_size = 50
+text = "This Is The Game"
+
+[node name="PlayersPositions" type="Node2D" parent="."]
+
+[node name="0" type="Marker2D" parent="PlayersPositions" groups=["pos"]]
+position = Vector2(107, 77)
+
+[node name="1" type="Marker2D" parent="PlayersPositions" groups=["pos"]]
+position = Vector2(975, 305)

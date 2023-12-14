@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c312aa74b3nib"]
+[gd_scene load_steps=4 format=3 uid="uid://c312aa74b3nib"]
 
 [ext_resource type="Script" path="res://Scripts/multiplayer_scene.gd" id="1_sp03g"]
 [ext_resource type="Script" path="res://Scripts/LanServerVrowser.gd" id="2_fdsg8"]
+[ext_resource type="PackedScene" uid="uid://c6hilgny6bh7o" path="res://Scenes/game.tscn" id="2_mi6ki"]
 
 [node name="MultiplayerScene" type="Control"]
 layout_mode = 3
@@ -11,56 +12,55 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sp03g")
+gameScene = ExtResource("2_mi6ki")
 
 [node name="Controls" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -572.0
-offset_top = -318.0
-offset_right = -360.0
-offset_bottom = -112.0
+offset_left = -189.0
+offset_right = 190.0
+offset_bottom = 270.0
 grow_horizontal = 2
-grow_vertical = 2
 
 [node name="IP" type="LineEdit" parent="Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 tooltip_text = "Enter The IP"
 placeholder_text = "Enter The IP"
-metadata/_edit_lock_ = true
-
-[node name="Port" type="LineEdit" parent="Controls"]
-layout_mode = 2
-tooltip_text = "Enter The Port"
-placeholder_text = "Enter The Port"
+alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Name" type="LineEdit" parent="Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 tooltip_text = "Enter Your Name"
 placeholder_text = "Enter Your Name"
+alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Host" type="Button" parent="Controls"]
 layout_mode = 2
-size_flags_stretch_ratio = 0.0
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
 text = "Host"
 metadata/_edit_lock_ = true
 
 [node name="Join" type="Button" parent="Controls"]
 layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
 text = "Join"
 metadata/_edit_lock_ = true
 
-[node name="DataOut" type="Button" parent="Controls"]
+[node name="ColorPicker" type="ColorPickerButton" parent="Controls"]
 layout_mode = 2
-text = "Print All Players Data"
-metadata/_edit_lock_ = true
+size_flags_vertical = 3
+text = "Choose a color"
+color = Color(1, 1, 1, 1)
 
 [node name="Lobby" type="VBoxContainer" parent="."]
 visible = false
@@ -79,49 +79,83 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="Lobby"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Waiting For Players...."
 
 [node name="PlayersCount" type="Label" parent="Lobby"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "0"
 horizontal_alignment = 1
 
 [node name="Exit" type="Button" parent="Lobby"]
 layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
 text = "Exit"
 
 [node name="Data" type="Button" parent="Lobby"]
 layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
 text = "Print All Players Data"
 
+[node name="Start" type="Button" parent="Lobby"]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Start"
+
 [node name="LanServerVrowser" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 35.0
+offset_top = 793.0
+offset_right = 35.0
+offset_bottom = 796.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("2_fdsg8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LanServerVrowser"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="LanServerVrowser"]
 layout_mode = 0
-offset_left = 482.0
-offset_top = 65.0
-offset_right = 584.0
-offset_bottom = 131.0
+offset_left = -33.0
+offset_top = -520.0
+offset_right = 1114.0
+offset_bottom = -150.0
 
-[node name="Listen" type="Button" parent="LanServerVrowser/VBoxContainer"]
+[node name="VBoxContainer" type="HBoxContainer" parent="LanServerVrowser/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
-text = "Listen IP"
 
-[node name="Stop" type="Button" parent="LanServerVrowser/VBoxContainer"]
+[node name="Listen" type="Button" parent="LanServerVrowser/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Listen"
+
+[node name="Stop" type="Button" parent="LanServerVrowser/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 text = "Stop"
 
-[node name="BroadCastTimer" type="Timer" parent="."]
+[node name="Panel" type="Panel" parent="LanServerVrowser/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BroadCastTimer" type="Timer" parent="LanServerVrowser"]
+
+[node name="ListenerTimer" type="Timer" parent="LanServerVrowser"]
 
 [connection signal="pressed" from="Controls/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="Controls/Join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="Controls/DataOut" to="." method="_on_data_out_pressed"]
 [connection signal="pressed" from="Lobby/Exit" to="." method="_on_Exit_pressed"]
 [connection signal="pressed" from="Lobby/Data" to="." method="_on_data_pressed"]
-[connection signal="pressed" from="LanServerVrowser/VBoxContainer/Listen" to="LanServerVrowser" method="_on_listen_pressed"]
-[connection signal="pressed" from="LanServerVrowser/VBoxContainer/Stop" to="LanServerVrowser" method="_on_stop_pressed"]
-[connection signal="timeout" from="BroadCastTimer" to="LanServerVrowser" method="_on_broad_cast_timer_timeout"]
+[connection signal="pressed" from="Lobby/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="LanServerVrowser/VBoxContainer2/VBoxContainer/Listen" to="LanServerVrowser" method="_on_listen_pressed"]
+[connection signal="pressed" from="LanServerVrowser/VBoxContainer2/VBoxContainer/Stop" to="LanServerVrowser" method="_on_stop_pressed"]
+[connection signal="timeout" from="LanServerVrowser/BroadCastTimer" to="LanServerVrowser" method="_on_broad_cast_timer_timeout"]
+[connection signal="timeout" from="LanServerVrowser/ListenerTimer" to="LanServerVrowser" method="_on_listener_timer_timeout"]

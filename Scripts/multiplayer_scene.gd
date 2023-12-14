@@ -2,9 +2,12 @@ extends Control
 
 # Variables
 var address: String 
-var port: int
-var playerData: Dictionary = {}
+var port: int = 8910
+var playerData: Dictionary = {"name" : "", "color": Color(0,0,0,0)}
 var server: ENetMultiplayerPeer 
+
+# Export Variables
+@export var gameScene: PackedScene
 
 # Constants
 const MAX_CONNECTIONS = 20
@@ -16,16 +19,19 @@ signal server_disconnected
 signal connection_faild
 var connected: bool = false
 
+# Node Functions
 
 func _ready():
 	Global.connect("countChanged", changeCount)
-	
+
 func _process(_delta):
 	if connected == true:
 		if multiplayer.multiplayer_peer == null:
 			Global.players.clear()
 			Global.playersLoaded = 0
 			connected = false
+
+# Multiplayer Functions
 
 # Server Functions
 func playerConnected(id):
@@ -44,7 +50,7 @@ func playerDisconnected(id):
 	
 # Client Functions
 func serverConnected():
-	#Global.playersLoaded += 1
+	Global.playersLoaded += 1
 	print("Server Connected!")
 	checkName()
 	# add player data to players array
@@ -62,25 +68,30 @@ func serverDisconnected():
 	$Controls.visible = true
 	# Show Lobby Menu
 	$Lobby.visible = false
+	#
+	$LanServerVrowser.visible = true
 
 func connectionFailed():
 	print("Couldn't connect!")	
 	multiplayer.multiplayer_peer = null
 
-# Called On All Devieces
+
+# RPC Functions
 @rpc("any_peer", "call_local", "reliable")
 func register_player(newPlayerData):
 	var newPlayerId = multiplayer.get_remote_sender_id()
 	Global.players[newPlayerId] = newPlayerData
 
+@rpc("any_peer", "call_local")
+func startGame():
+	# Change Scene to Gane Scene
+	get_tree().change_scene_to_packed(gameScene)
 
 # Buttons Pressed Functions
 func _on_host_pressed():
 	multiplayerFunc()
 	
 	server = ENetMultiplayerPeer.new()
-
-	checkPort()
 		
 	var err = server.create_server(port, MAX_CONNECTIONS)
 
@@ -94,15 +105,22 @@ func _on_host_pressed():
 	print("Creating Server Successfully!! Waiting for Players........")
 		
 	checkName()
-
+	checkColor()
+	
+	Global.playersLoaded += 1
+	
 	Global.players[1] = playerData
 	
 	# Hide Main menu
 	$Controls.visible = false
 	# Show Lobby Menu
 	$Lobby.visible = true
-	
+	# Hide Lan Browser
+	$LanServerVrowser.visible = false
+	# Broadcast room Data 
 	$LanServerVrowser.setUpBroadCast($Controls/Name.text)
+	# Show Start Button
+	$Lobby/Start.visible = true
 	
 func _on_join_pressed():
 	multiplayerFunc()
@@ -110,7 +128,18 @@ func _on_join_pressed():
 	server = ENetMultiplayerPeer.new()
 
 	checkAddress()
-	checkPort()
+	checkColor()
+	checkName()
+	
+	$LanServerVrowser.runListener()
+	await  get_tree().create_timer(2).timeout
+	
+	if address not in Global.avilableRooms:
+		print(Global.avilableRooms)
+		print("This IP Not Exist")
+		disconnectFromTheServer()
+		return	
+		
 	
 	server.create_client(address, port)
 	multiplayer.multiplayer_peer = server
@@ -119,19 +148,23 @@ func _on_join_pressed():
 	$Controls.visible = false
 	# Show Lobby Menu
 	$Lobby.visible = true
+	#
+	$LanServerVrowser.visible = false
 
 func _on_data_pressed():
-	printPlayersData()
-
-func _on_data_out_pressed():
 	printPlayersData()
 
 func _on_Exit_pressed():
 	disconnectFromTheServer()
 	$Controls.visible = true
 	$Lobby.visible = false
-	
-	
+	$LanServerVrowser.visible = true
+	$LanServerVrowser.cleanUp()
+
+func _on_start_pressed():
+	startGame.rpc()
+
+
 # My Custem Functions
 func printPlayersData():
 	print("\nThere Is [" + str(Global.playersLoaded) + "] Players\n")
@@ -161,10 +194,12 @@ func checkAddress():
 		address = "127.0.0.1"
 
 func checkName():
-	# To check if it is null
-	if $Controls/Name.text.strip_edges() == "":
-		$Controls/Name.text = "Unknown"
-	playerData["name"] = $Controls/Name.text
+	
+	playerData["name"] = "Unknown" if $Controls/Name.text.strip_edges() == "" else $Controls/Name.text
+
+func checkColor():
+	#if $Controls/ColorPicker.color == Color(0,0,0,0):
+	playerData["color"] = Color(0,0,0,1) if $Controls/ColorPicker.color == Color(0,0,0,0)  else  $Controls/ColorPicker.color
 
 func disconnectFromTheServer():
 	multiplayer.multiplayer_peer = null
@@ -176,4 +211,6 @@ func disconnectFromTheServer():
 
 func changeCount():
 	$Lobby/PlayersCount.text = str(Global.playersLoaded)
+
+
 
