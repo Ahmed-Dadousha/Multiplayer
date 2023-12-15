@@ -58,7 +58,7 @@ func _on_Exit_pressed():
 	
 	$Controls.visible = true
 	$Lobby.visible = false
-	$LanServerVrowser.visible = true
+	#$LanServerVrowser.visible = true
 	NetworkManger.cleanUp()
 	Global.playersLoaded = 0
 	Global.players.clear()
