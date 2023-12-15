@@ -9,8 +9,8 @@ var address: String
 var port: int = 8910
 var playerData: Dictionary = {"name" : "", "color": Color(0,0,0,0), "index": 0}
 var server: ENetMultiplayerPeer 
-var gameScene: PackedScene =  preload("res://Scenes/game.tscn")
-var mainScene: PackedScene = preload("res://Scenes/multiplayer_scene.tscn")
+var mainScene:String = "res://Scenes/multiplayer_scene.tscn"
+var NextScene: String = "res://Scenes/game.tscn"
 # Constants
 const MAX_CONNECTIONS = 20
 
@@ -78,7 +78,7 @@ func register_player(newPlayerData):
 @rpc("any_peer", "call_local")
 func nextScene():
 	# Change Scene to Gane Scene
-	get_tree().change_scene_to_packed(gameScene)
+	get_tree().change_scene_to_file(NextScene)
 
 @rpc("any_peer", "call_local")
 func removePlayer(id: int):
@@ -180,7 +180,7 @@ func disconnectFromTheServer():
 	multiplayer.connection_failed.disconnect(connectionFailed)
 
 func returnToMain():
-	get_tree().change_scene_to_packed(mainScene)
+	get_tree().change_scene_to_file(mainScene)
 #endregion Multiplayer Manager
 
 

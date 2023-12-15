@@ -5,8 +5,7 @@ extends Control
 func _ready():
 	Global.connect("countChanged", changeCount)
 	NetworkManger.connect("server_disconnected", serverDisconnected)
-
-
+	
 func serverDisconnected():
 
 	# Hide Main menu
@@ -65,6 +64,9 @@ func _on_Exit_pressed():
 	Global.players.clear()
 
 func _on_start_pressed():
+	$CanvasLayer.visible = true
+	$CanvasLayer/AnimationPlayer.play("fade")
+	await $CanvasLayer/AnimationPlayer.animation_finished
 	NetworkManger.nextScene.rpc()
 	
 # My Custem Functions

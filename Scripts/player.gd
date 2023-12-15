@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var speed: int = 1000
+var speed: int = 15000
 
 func setName(text: String):
 	$Label.text = text
