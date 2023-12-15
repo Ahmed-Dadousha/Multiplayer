@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Global="*res://Scripts/Global.gd"
 NetworkManger="*res://Scripts/networkManger.gd"
+Transitiontscn="*res://Scenes/transitiontscn.tscn"
 
 [display]
 

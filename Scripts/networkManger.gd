@@ -78,6 +78,7 @@ func register_player(newPlayerData):
 @rpc("any_peer", "call_local")
 func nextScene():
 	# Change Scene to Gane Scene
+	await Transitiontscn.animate()
 	get_tree().change_scene_to_file(NextScene)
 
 @rpc("any_peer", "call_local")

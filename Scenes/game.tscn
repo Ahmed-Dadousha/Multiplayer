@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6hilgny6bh7o"]
+[gd_scene load_steps=3 format=3 uid="uid://c6hilgny6bh7o"]
 
 [ext_resource type="Script" path="res://Scripts/game.gd" id="1_q44nk"]
 [ext_resource type="PackedScene" uid="uid://do68pp74fwc75" path="res://Scenes/player.tscn" id="2_0bulw"]
-[ext_resource type="PackedScene" uid="uid://dygcbhqifywoj" path="res://Scenes/transitiontscn.tscn" id="3_pt1ll"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_q44nk")
@@ -37,5 +36,3 @@ position = Vector2(76, 146)
 
 [node name="1" type="Node2D" parent="playerSpawnPositions" groups=["pos"]]
 position = Vector2(1003, 144)
-
-[node name="CanvasLayer" parent="." instance=ExtResource("3_pt1ll")]
