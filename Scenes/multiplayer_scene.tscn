@@ -29,7 +29,6 @@ size_flags_vertical = 3
 tooltip_text = "Enter The IP"
 placeholder_text = "Enter The IP"
 alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="Name" type="LineEdit" parent="Controls"]
 layout_mode = 2
@@ -38,21 +37,18 @@ size_flags_vertical = 3
 tooltip_text = "Enter Your Name"
 placeholder_text = "Enter Your Name"
 alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="Host" type="Button" parent="Controls"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_default_cursor_shape = 2
 text = "Host"
-metadata/_edit_lock_ = true
 
 [node name="Join" type="Button" parent="Controls"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_default_cursor_shape = 2
 text = "Join"
-metadata/_edit_lock_ = true
 
 [node name="ColorPicker" type="ColorPickerButton" parent="Controls"]
 layout_mode = 2
@@ -104,25 +100,19 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Start"
 
-[node name="LanServerVrowser" type="Control" parent="."]
+[node name="LanServerVrowser" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 35.0
-offset_top = 793.0
-offset_right = 35.0
-offset_bottom = 796.0
+offset_top = 352.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_fdsg8")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="LanServerVrowser"]
-layout_mode = 0
-offset_left = -33.0
-offset_top = -520.0
-offset_right = 1114.0
-offset_bottom = -150.0
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="VBoxContainer" type="HBoxContainer" parent="LanServerVrowser/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 70)
@@ -155,5 +145,3 @@ size_flags_vertical = 3
 [connection signal="pressed" from="Lobby/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="LanServerVrowser/VBoxContainer2/VBoxContainer/Listen" to="LanServerVrowser" method="_on_listen_pressed"]
 [connection signal="pressed" from="LanServerVrowser/VBoxContainer2/VBoxContainer/Stop" to="LanServerVrowser" method="_on_stop_pressed"]
-[connection signal="timeout" from="LanServerVrowser/BroadCastTimer" to="LanServerVrowser" method="_on_broad_cast_timer_timeout"]
-[connection signal="timeout" from="LanServerVrowser/ListenerTimer" to="LanServerVrowser" method="_on_listener_timer_timeout"]

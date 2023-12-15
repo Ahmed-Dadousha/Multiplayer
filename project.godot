@@ -22,7 +22,7 @@ NetworkManger="*res://Scripts/networkManger.gd"
 
 [display]
 
-window/stretch/aspect="ignore"
+window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
 
 [filesystem]

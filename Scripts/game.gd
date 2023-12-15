@@ -15,8 +15,6 @@ func _ready():
 		curretntPlayer.setName(Global.players[player]["name"])
 		add_child(curretntPlayer)	
 		
-		print(str(Global.players[player]["index"]))
-		
 		for spawn in get_tree().get_nodes_in_group("pos"):
 			if spawn.name == str(Global.players[player]["index"]):
 				curretntPlayer.global_position = spawn.global_position
