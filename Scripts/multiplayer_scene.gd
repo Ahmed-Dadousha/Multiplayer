@@ -1,8 +1,11 @@
 extends Control
 
+
+
 func _ready():
 	Global.connect("countChanged", changeCount)
 	NetworkManger.connect("server_disconnected", serverDisconnected)
+
 
 func serverDisconnected():
 
@@ -12,6 +15,7 @@ func serverDisconnected():
 	$Lobby.visible = false
 	#
 	$LanServerVrowser.visible = true
+
 
 # Buttons Pressed Functions
 func _on_host_pressed():
@@ -29,14 +33,15 @@ func _on_host_pressed():
 		$LanServerVrowser.visible = false
 		# Show Start Button
 		$Lobby/Start.visible = true	
-	
+	NetworkManger.playerData["index"] = Global.playersLoaded 
+
 func _on_join_pressed():
 
 	# Assign Data
 	NetworkManger.playerData["name"] = $Controls/Name.text
 	NetworkManger.address = $Controls/IP.text
 	NetworkManger.playerData["color"] = $Controls/ColorPicker.color
-	
+
 	if await NetworkManger.createClient() == true:
 		# Hide Main menu
 		$Controls.visible = false
@@ -44,6 +49,7 @@ func _on_join_pressed():
 		$Lobby.visible = true
 		# Hide Server Browser
 		$LanServerVrowser.visible = false
+	NetworkManger.playerData["index"] = Global.playersLoaded 
 	
 func _on_data_pressed():
 	NetworkManger.printPlayersData()
@@ -54,10 +60,12 @@ func _on_Exit_pressed():
 	$Controls.visible = true
 	$Lobby.visible = false
 	$LanServerVrowser.visible = true
-	$LanServerVrowser.cleanUp()
+	NetworkManger.cleanUp()
+	Global.playersLoaded = 0
+	Global.players.clear()
 
 func _on_start_pressed():
-	NetworkManger.startGame.rpc()
+	NetworkManger.nextScene.rpc()
 	
 # My Custem Functions
 func changeCount():

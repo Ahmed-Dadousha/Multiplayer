@@ -4,17 +4,25 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-			# Create Players 
+	
+	NetworkManger.connect("player_disconnected", playerDisconnected)
+
+	# Create Players 
 	for player in Global.players.keys():
 		var curretntPlayer = playerScene.instantiate() as CharacterBody2D
 		curretntPlayer.name = str(player)
 		curretntPlayer.modulate = Global.players[player]["color"]
 		curretntPlayer.setName(Global.players[player]["name"])
 		add_child(curretntPlayer)	
-	
-		curretntPlayer.global_position = Vector2(randi_range(10, 1100), randi_range(10, 600))
+		
+		print(str(Global.players[player]["index"]))
+		
+		for spawn in get_tree().get_nodes_in_group("pos"):
+			if spawn.name == str(Global.players[player]["index"]):
+				curretntPlayer.global_position = spawn.global_position
 				
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
+func playerDisconnected(id):
+	get_node(str(id)).queue_free()
+
+	
 

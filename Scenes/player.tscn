@@ -11,14 +11,13 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="player" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" groups=["Players"]]
 script = ExtResource("1_x1b1b")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_j1663")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("RectangleShape2D_22g4v")
 
 [node name="Label" type="Label" parent="."]
