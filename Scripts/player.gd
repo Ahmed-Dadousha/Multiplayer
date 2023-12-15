@@ -6,6 +6,7 @@ func setName(text: String):
 func _enter_tree():
 	# To avoid control other players charcter
 	set_multiplayer_authority(str(name).to_int())
+	
 func _physics_process(_delta):
 		
 	if not is_multiplayer_authority(): return

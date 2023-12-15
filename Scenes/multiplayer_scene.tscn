@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c312aa74b3nib"]
+[gd_scene load_steps=3 format=3 uid="uid://c312aa74b3nib"]
 
 [ext_resource type="Script" path="res://Scripts/multiplayer_scene.gd" id="1_sp03g"]
 [ext_resource type="Script" path="res://Scripts/LanServerVrowser.gd" id="2_fdsg8"]
-[ext_resource type="PackedScene" uid="uid://c6hilgny6bh7o" path="res://Scenes/game.tscn" id="2_mi6ki"]
 
 [node name="MultiplayerScene" type="Control"]
 layout_mode = 3
@@ -12,7 +11,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sp03g")
-gameScene = ExtResource("2_mi6ki")
 
 [node name="Controls" type="VBoxContainer" parent="."]
 layout_mode = 1

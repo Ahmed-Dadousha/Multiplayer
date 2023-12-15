@@ -1,5 +1,12 @@
 extends Node
+
 signal countChanged()
+signal sceneChanged()
+
+var changeScene:bool = false:
+	set(value):
+		changeScene = true
+		sceneChanged.emit()
 
 var players: Dictionary = {}
 
@@ -16,3 +23,5 @@ func addIP(value):
 
 func removeIP(value):
 	avilableRooms.erase(value)
+
+

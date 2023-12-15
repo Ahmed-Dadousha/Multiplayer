@@ -35,7 +35,7 @@ func setUpBroadCast(roomName):
 
 # Brocast room data every one Second
 func _on_broad_cast_timer_timeout():
-	print("Broadcasting Game!")
+	#print("Broadcasting Game!")
 	RoomInfo.Count = Global.playersLoaded
 	var data = JSON.stringify(RoomInfo)
 	var packet = data.to_ascii_buffer()
@@ -72,12 +72,12 @@ func _on_listener_timer_timeout():
 	if run == true:
 		if listener.get_available_packet_count() > 0:
 			var serverIp = listener.get_packet_ip()
-			var serverPort = listener.get_packet_port()
+			#var serverPort = listener.get_packet_port()
 			var bytes = listener.get_packet()	
 			var data = bytes.get_string_from_ascii()
-			var roomInfo = JSON.parse_string(data)
+			#var roomInfo = JSON.parse_string(data)
 			
-			print("Server IP: " + serverIp + "; Port: " + str(serverPort) + "; RoomInfo: " + str(roomInfo) + ";")
+			#print("Server IP: " + serverIp + "; Port: " + str(serverPort) + "; RoomInfo: " + str(roomInfo) + ";")
 			if serverIp != "":
 				Global.addIP(serverIp)
 		else:
